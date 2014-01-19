@@ -159,7 +159,6 @@ public class GUI extends JFrame {
     }
 
     private void eingabe(String addr) {
-        //anzeige.setText(a);
         Double load = Double.parseDouble(snmpGet(addr, "snmp4me", ".1.3.6.1.4.1.2021.10.1.3.1"));
         int v = getLoadColorId(load);
 
@@ -176,6 +175,7 @@ public class GUI extends JFrame {
             if (v == 0) anzeige2.setBackground(Color.green);
             if (v == 1) anzeige2.setBackground(Color.yellow);
             if (v == 2) anzeige2.setBackground(Color.red);
+            if (v == 255) anzeige2.setBackground(Color.red);
             anzeige2.setText(String.valueOf(load));
         }
 
@@ -263,11 +263,12 @@ public class GUI extends JFrame {
                 }
             } else {
                 //System.out.println("Looks like a TimeOut occured ");
-                textArea.append("Looks like a TimeOut occured ");
+                textArea.append("Looks like a TimeOut occured" + newline);
             }
             snmp.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            textArea.append("Looks like a Error occured" + newline);
         }
         //System.out.println("Response="+strResponse);
         return strResponse;
