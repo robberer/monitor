@@ -58,7 +58,6 @@ public class GUI extends JFrame {
     private final static String newline = "\n";
 
     private boolean isStarted = false;
-    private JLabel counterLabel = new JLabel("Not started");
 
     private Worker worker = new Worker();
 
@@ -91,9 +90,9 @@ public class GUI extends JFrame {
         getContentPane().setLayout(new BorderLayout(5, 5));
 
         //Buttons erzeugen
-        button1 = new JButton("NIXBITCH 1");
+        button1 = new JButton("Nixbitch 1");
         button1.setFocusable(false);
-        button2 = new JButton("NIXBITCH 2");
+        button2 = new JButton("Nixbitch 2");
         button2.setFocusable(false);
 
         // Textarea erzeugen
@@ -123,17 +122,17 @@ public class GUI extends JFrame {
         addButtonListener(button2);
 
         //Labels erzeugen
-        oben = new JLabel("Uebersicht");
+        oben = new JLabel();
         oben.setText("Refresh Thread: stopped");
 
         //Labels zentrieren
         oben.setHorizontalAlignment(JLabel.CENTER);
 
         // Anzeige Labels restellen
-        anzeige1 = new JLabel("Button klicken");
+        anzeige1 = new JLabel("Click Button");
         anzeige1.setHorizontalAlignment(JLabel.LEFT);
         anzeige1.setOpaque(true);
-        anzeige2 = new JLabel("Button klicken");
+        anzeige2 = new JLabel("Click Button");
         anzeige2.setHorizontalAlignment(JLabel.LEFT);
         anzeige2.setOpaque(true);
 
@@ -155,10 +154,10 @@ public class GUI extends JFrame {
     private void addButtonListener(JButton b) {
         b.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                if (ae.getActionCommand().equals("NIXBITCH 2")) {
+                if (ae.getActionCommand().equals("Nixbitch 2")) {
                     addr = "192.168.10.214";
                     eingabe(addr);
-                } else if (ae.getActionCommand().equals("NIXBITCH 1")) {
+                } else if (ae.getActionCommand().equals("Nixbitch 1")) {
                     addr = "192.168.77.64";
                     eingabe(addr);
                 }
