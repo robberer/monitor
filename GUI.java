@@ -37,11 +37,9 @@ import org.snmp4j.transport.DefaultUdpTransportMapping;
 
 
 public class GUI extends JFrame {
-    private JButton button1;
-    private JButton button2;
-    private JPanel panelButton;
     private JPanel panelResult;
-    private JLabel oben;
+    private JPanel panelLogfile;
+    private JLabel status;
     private JLabel anzeige1;
     private JLabel anzeige2;
     private JTextArea textArea;
@@ -61,12 +59,12 @@ public class GUI extends JFrame {
                 worker = new Worker();
                 worker.execute();
                 isStarted = true;
-                oben.setText("Refresh Thread: running");
+                status.setText("Refresh Thread: running");
             } else {
                 worker.setStopFlag();
                 worker.cancel(true);
                 isStarted = false;
-                oben.setText("Refresh Thread: stopped");
+                status.setText("Refresh Thread: stopped");
             }
         }
 
@@ -80,46 +78,45 @@ public class GUI extends JFrame {
         setResizable(false);
 
         //Das BorderLayout ist mal das erste - später fügen wir noch ein GridLayout im Westen hinzu
-        getContentPane().setLayout(new BorderLayout(5, 5));
+        getContentPane().setLayout(new BorderLayout());
+
+        // Create the tab pages
+		createPageResult();
+		createPageLogfile();
+
+        // Erzeugung eines JTabbedPane-Objektes
+        JTabbedPane tabpane = new JTabbedPane(JTabbedPane.TOP);
+        tabpane.addTab("Result", panelResult);
+        tabpane.addTab("Logfile", panelLogfile);
+        getContentPane().add(BorderLayout.CENTER, tabpane);
+
+        pack();
+        setVisible(true);
+    }
+
+    public void createPageResult() {
+        panelResult = new JPanel();
+        panelResult.setLayout( new BorderLayout() );
+
+        JPanel panelResultLeft = new JPanel(new GridLayout(3, 1));
+        JPanel panelResultRight = new JPanel(new GridLayout(3, 1));
+        panelResultRight.setPreferredSize(new Dimension(100, 0));
+        panelResultRight.setMinimumSize(new Dimension(100, 0));
 
         //Buttons erzeugen
-        button1 = new JButton("Nixbitch 1");
+        JButton button1 = new JButton("Nixbitch 1");
         button1.setFocusable(false);
-        button2 = new JButton("Nixbitch 2");
+        JButton button2 = new JButton("Nixbitch 2");
         button2.setFocusable(false);
 
-        // Textarea erzeugen
-        textArea = new JTextArea(5, 18);
-        textArea.setEditable(false);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setText("Logfile started");
-
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setViewportView(textArea);
-
-        //Panels erzeugen auf einem GridLayout
-        panelButton = new JPanel(new GridLayout(3, 1));
-        panelResult = new JPanel(new GridLayout(3, 1));
-        panelResult.setPreferredSize(new Dimension(100, 0));
-        panelResult.setMinimumSize(new Dimension(100, 0));
-
         //Auf Panel Buttons packen
-        panelButton.add(button1);
-        panelButton.add(button2);
-        panelButton.add(startButton);
+        panelResultLeft.add(button1);
+        panelResultLeft.add(button2);
+        panelResultLeft.add(startButton);
 
         //Listener für Buttons
         addButtonListener(button1);
         addButtonListener(button2);
-
-        //Labels erzeugen
-        oben = new JLabel();
-        oben.setText("Refresh Thread: stopped");
-
-        //Labels zentrieren
-        oben.setHorizontalAlignment(JLabel.CENTER);
 
         // Anzeige Labels restellen
         anzeige1 = new JLabel("Click Button");
@@ -129,19 +126,45 @@ public class GUI extends JFrame {
         anzeige2.setHorizontalAlignment(JLabel.LEFT);
         anzeige2.setOpaque(true);
 
-        //Labels auf Frame packen (direkt auf das BorderLayout)
-        getContentPane().add(BorderLayout.NORTH, oben);
-        getContentPane().add(BorderLayout.SOUTH, scrollPane);
+        //Labels erzeugen
+        status = new JLabel("Uebersicht");
+        status.setText("Refresh Thread: stopped");
 
         // Auf Panel Labels packen
-        panelResult.add(anzeige1);
-        panelResult.add(anzeige2);
+        panelResultRight.add(anzeige1);
+        panelResultRight.add(anzeige2);
 
-        //Panels auf Frame packen (das panelButton hat ein GridLayout, dass jetzt in den WestBereich des BorderLayouts kommt)
-        getContentPane().add(BorderLayout.WEST, panelButton);
-        getContentPane().add(BorderLayout.EAST, panelResult);
-        pack();
-        setVisible(true);
+        panelResult.add(panelResultLeft, BorderLayout.WEST);
+        panelResult.add(panelResultRight, BorderLayout.EAST);
+        panelResult.add(status, BorderLayout.SOUTH);
+
+
+    }
+
+    public void createPageLogfile()
+    {
+        panelLogfile = new JPanel();
+        panelLogfile.setLayout( new BorderLayout() );
+
+        // Textarea erzeugen
+        textArea = new JTextArea(5, 18);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setText("Logfile started");
+
+        // Scrollpane fuer Textarea
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setViewportView(textArea);
+
+        panelLogfile.add(scrollPane, BorderLayout.CENTER);
+
+        //panel2.add( new JButton( "North" ), BorderLayout.NORTH );
+        //panel2.add( new JButton( "South" ), BorderLayout.SOUTH );
+        //panel2.add( new JButton( "East" ), BorderLayout.EAST );
+        //panel2.add( new JButton( "West" ), BorderLayout.WEST );
+        //panel2.add( new JButton( "Center" ), BorderLayout.CENTER );
     }
 
     private void addButtonListener(JButton b) {
