@@ -287,11 +287,13 @@ public class GUI extends JFrame {
             } else {
                 //System.out.println("Looks like a TimeOut occured ");
                 textArea.append("Looks like a TimeOut occured" + newline);
+                return "0.00";
             }
             snmp.close();
         } catch (Exception e) {
             //e.printStackTrace();
             textArea.append("Looks like a Error occured" + newline);
+            return "0.00";
         }
         //System.out.println("Response="+strResponse);
         return strResponse;
